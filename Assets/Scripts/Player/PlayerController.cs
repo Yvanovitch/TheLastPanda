@@ -10,13 +10,10 @@ public class PlayerController : MonoBehaviour {
     public float            speed = 1;
     public float            jumpSpeed = 0;
     public GameObject       playerPivot;
-    public Camera           cameraFollow;
-    public float            cameraSmoothing;
 
     private bool            isMoving;
     private Rigidbody       rg;
     private bool            canXmove;
-    private Vector3         cameraOffset;
 
 
     // -------------------------------------------------------------------------
@@ -26,11 +23,6 @@ public class PlayerController : MonoBehaviour {
     void Start () {
         this.canXmove = true;
         this.rg = GetComponent<Rigidbody>();
-        this.cameraOffset = new Vector3();
-        this.cameraOffset = transform.position - cameraFollow.transform.position;
-        //Only y access is interesting for us
-        this.cameraOffset.y = 0f;
-        this.cameraOffset.x = 0f;
 	}
 
     //Called at fixed time
@@ -41,7 +33,6 @@ public class PlayerController : MonoBehaviour {
         if(Input.GetKeyDown("space")) {
             this.jump();
         }
-        moveFollowCamera();
     }
 
 
@@ -61,8 +52,5 @@ public class PlayerController : MonoBehaviour {
         //The *200 is just to get jumpSpeed values in "Human" range (Around 10, 11..)
         Vector3 movementY = new Vector3(0, jumpSpeed*200, 0);
         this.rg.AddForce(movementY);
-    }
-
-    private void moveFollowCamera() {
     }
 }
