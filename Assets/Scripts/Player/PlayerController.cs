@@ -7,13 +7,19 @@ public class PlayerController : MonoBehaviour {
     // -------------------------------------------------------------------------
     // Variables
     // -------------------------------------------------------------------------
-    public float            speed = 1;
+    public float            moveSpeed = 1;
     public float            jumpSpeed = 0;
     public GameObject       playerPivot;
+    public float            collisionDistance = 1f;
 
-    private bool            isMoving;
+    public Transform[]      feetColliders;
+    public Transform[]      leftColliders;
+    public Transform[]      rightCollider;
+    
+    private bool            isGrounded;
     private Rigidbody       rg;
     private bool            canXmove;
+    private LayerMask       groundLayer;
 
 
     // -------------------------------------------------------------------------
@@ -21,36 +27,78 @@ public class PlayerController : MonoBehaviour {
     // -------------------------------------------------------------------------
     // Use this for initialization
     void Start () {
-        this.canXmove = true;
-        this.rg = GetComponent<Rigidbody>();
-	}
+        this.groundLayer    = LayerMask.GetMask("Ground");
+        this.rg             = GetComponent<Rigidbody>();
+        this.canXmove       = true;
+    }
+
+    public void Update() {
+        this.isGrounded = checkIsGrounded();
+    }
 
     //Called at fixed time
     private void FixedUpdate() {
         float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical"); //Note used atm
+        float v = Input.GetAxis("Vertical");
         this.handlePlayerMovement(h, v);
-        if(Input.GetKeyDown("space")) {
+        if(Input.GetKeyDown("space") && isGrounded) {
+            //Debug.Log(Time.);
             this.jump();
         }
     }
 
 
     // -------------------------------------------------------------------------
-    // Personal functions - Override
+    // GamePlay functions
     // -------------------------------------------------------------------------
     private void handlePlayerMovement(float h, float v) {
         //Process X movement if allowed
         if(canXmove) {
-            // The /200 is just to get angular speed at "human" range
-            Vector3 movementX = new Vector3(0, (speed*h)/200, 0);
-            this.playerPivot.transform.Rotate(movementX);
+            //To move left or right, no GameObject must be on the way.
+            if( (h>0 && !checkLeftColliders()) || (h<0 && !checkRightColliders())) {
+                Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
+                this.playerPivot.transform.Rotate(movementX);
+            }
         }
     }
 
     private void jump() {
-        //The *200 is just to get jumpSpeed values in "Human" range (Around 10, 11..)
-        Vector3 movementY = new Vector3(0, jumpSpeed*200, 0);
-        this.rg.AddForce(movementY);
+        if(!isGrounded) { return; }
+        this.rg.AddForce(new Vector3(0, jumpSpeed, 0));
+    }
+
+
+    // -------------------------------------------------------------------------
+    // Tool functions - Check functions
+    // -------------------------------------------------------------------------
+    private bool checkIsGrounded() {
+        Vector3 v = new Vector3(0, -1, 0);
+        bool grounded = false;
+        foreach(Transform point in feetColliders) {
+            grounded = Physics.Raycast(point.position, v, 0.02f, groundLayer);
+            if(grounded) { return true; } //We can stop as soon as one is grounded
+        }
+        return grounded;
+    }
+
+    private bool checkRightColliders() {
+        Vector3 v = new Vector3(-1, 0, 0);
+        bool collide = false;
+        foreach(Transform point in leftColliders) {
+            collide = Physics.Raycast(point.position, v, collisionDistance);
+            Debug.DrawRay(point.position, v);
+            if(collide) { return true; }
+        }
+        return collide;
+    }
+
+    private bool checkLeftColliders() {
+        Vector3 v = new Vector3(1, 0, 0);
+        bool collide = false;
+        foreach(Transform point in leftColliders) {
+            collide = Physics.Raycast(point.position, v, collisionDistance);
+            if(collide) { return true; }
+        }
+        return collide;
     }
 }
