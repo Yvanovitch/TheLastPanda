@@ -8,10 +8,10 @@ public class PlayerController : MonoBehaviour {
     // Variables
     // -------------------------------------------------------------------------
     public float            moveSpeed = 1;
+    public float            ladderSpeed = 1;
     public float            jumpSpeed = 0;
     public GameObject       playerPivot;
     public float            collisionDistance = 1f;
-
     public Transform[]      feetColliders;
     public Transform[]      leftColliders;
     public Transform[]      rightCollider;
@@ -19,7 +19,9 @@ public class PlayerController : MonoBehaviour {
     private bool            isGrounded;
     private Rigidbody       rg;
     private bool            canXmove;
+    private bool            canYmove;
     private LayerMask       groundLayer;
+    private int             isOnLadder; //Int cuz can be on 2 ladders at same time
 
 
     // -------------------------------------------------------------------------
@@ -30,6 +32,7 @@ public class PlayerController : MonoBehaviour {
         this.groundLayer    = LayerMask.GetMask("Ground");
         this.rg             = GetComponent<Rigidbody>();
         this.canXmove       = true;
+        canYmove            = false;
     }
 
     public void Update() {
@@ -42,8 +45,24 @@ public class PlayerController : MonoBehaviour {
         float v = Input.GetAxis("Vertical");
         this.handlePlayerMovement(h, v);
         if(Input.GetKeyDown("space") && isGrounded) {
-            //Debug.Log(Time.);
             this.jump();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if(other.tag == "Ladder") {
+            ++isOnLadder;
+            canYmove = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if(other.tag == "Ladder") {
+            --isOnLadder;
+            if(isOnLadder >= 0) {
+                isOnLadder = 0; //Just in case of
+                canYmove = false;
+            }
         }
     }
 
@@ -59,6 +78,14 @@ public class PlayerController : MonoBehaviour {
                 Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
                 this.playerPivot.transform.Rotate(movementX);
             }
+        }
+        if(canYmove) {
+            Vector3 movementY = new Vector3(0, ladderSpeed*v, 0);
+            rg.velocity =  movementY;
+
+        }
+        if(isOnLadder>0) {
+           // Vector3 counterGravity
         }
     }
 
