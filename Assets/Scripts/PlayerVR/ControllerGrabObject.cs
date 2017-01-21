@@ -11,6 +11,8 @@ public class ControllerGrabObject : MonoBehaviour {
     // Serves as a reference to the GameObject that the player is currently grabbing
     private GameObject objectInHand;
 
+    private Quaternion initialRingRotation;
+
     private SteamVR_Controller.Device Controller
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
@@ -58,8 +60,28 @@ public class ControllerGrabObject : MonoBehaviour {
 
         var joint = AddFixedJoint();
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
-    }
-    
+
+        if (objectInHand.tag == "Ring")
+        {
+            GameObject parent = objectInHand.transform.parent.gameObject;
+
+            Vector3 initialRingRotationTemp = parent.transform.rotation.eulerAngles;
+            initialRingRotationTemp.x = initialRingRotationTemp.z = 0;
+            initialRingRotation = Quaternion.Euler(initialRingRotationTemp);
+            Vector3 initialLookAtRotationTemp = Quaternion.LookRotation(this.transform.position - parent.transform.position).eulerAngles;
+            initialLookAtRotationTemp.x = initialLookAtRotationTemp.z = 0;
+            Quaternion initialLookAtRotation = Quaternion.Euler(initialLookAtRotationTemp);
+            initialRingRotation = Quaternion.Inverse(initialLookAtRotation) * initialRingRotation;
+        }
+            /*Renderer rend = objectInHand.GetComponent<Renderer>();
+            if (rend != null)
+            {
+                rend.material = newMaterialRef;
+            }
+            Debug.Log("objectInHand: " + objectInHand.name);*/
+        }
+
+
     private FixedJoint AddFixedJoint()
     {
         FixedJoint fx = gameObject.AddComponent<FixedJoint>();
@@ -91,7 +113,22 @@ public class ControllerGrabObject : MonoBehaviour {
                 GrabObject();
             }
         }
+
+        if(objectInHand != null)
+        {
+            if (objectInHand.tag == "Ring")
+            {
+                GameObject parent = objectInHand.transform.parent.gameObject;
+                Vector3 newRotation = Quaternion.LookRotation(this.transform.position - parent.transform.position).eulerAngles;
+                newRotation.x = newRotation.z = 0;
+                Quaternion newRotationQuat = Quaternion.Euler(newRotation);
+                newRotationQuat *= initialRingRotation;
+                
+                parent.transform.rotation = newRotationQuat;
+            }
+        }
         
+
         if (Controller.GetHairTriggerUp())
         {
             if (objectInHand)
