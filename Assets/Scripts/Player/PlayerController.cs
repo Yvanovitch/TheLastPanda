@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour {
     public Transform[]      rightCollider;
     
     private bool            isGrounded;
-    private bool            canXmove;
     private Rigidbody       rg;
     private LayerMask       groundLayer;
     private Ladder          currentLadder; //Ladder where player is
@@ -30,7 +29,6 @@ public class PlayerController : MonoBehaviour {
     void Start () {
         this.groundLayer    = LayerMask.GetMask("Ground");
         this.rg             = GetComponent<Rigidbody>();
-        this.canXmove       = true;
         this.currentLadder  = null;
     }
 
@@ -46,22 +44,19 @@ public class PlayerController : MonoBehaviour {
         if(Input.GetKeyDown("space") && isGrounded) {
             this.jump();
         }
-    }   
+    }
 
 
     // -------------------------------------------------------------------------
     // GamePlay functions
     // -------------------------------------------------------------------------
     private void handlePlayerMovement(float h, float v) {
-        //Process X movement if allowed
-        if(canXmove) {
-            //To move left or right, no GameObject must be on the way.
-            if( (h>0 && !checkLeftColliders()) || (h<0 && !checkRightColliders())) {
-                Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
-                this.playerPivot.transform.Rotate(movementX);
-            }
+        //To move left or right, no GameObject must be on the way.
+        if( (h>0 && !checkLeftColliders()) || (h<0 && !checkRightColliders())) {
+            Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
+            this.playerPivot.transform.Rotate(movementX);
         }
-        if(currentLadder != null) {
+        if(currentLadder != null && currentLadder.isUsable == true) {
             Vector3 movementY = new Vector3(0, ladderSpeed*v, 0);
             rg.velocity =  movementY;
         }
