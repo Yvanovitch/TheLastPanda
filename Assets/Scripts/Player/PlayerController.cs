@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody       rg;
     private LayerMask       groundLayer;
     private Ladder          currentLadder; //Ladder where player is
+    private bool            isFacingRight;
 
 
     // -------------------------------------------------------------------------
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour {
         this.groundLayer    = LayerMask.GetMask("Ground");
         this.rg             = GetComponent<Rigidbody>();
         this.currentLadder  = null;
+        this.isFacingRight  = true;
     }
 
     public void Update() {
@@ -56,6 +58,7 @@ public class PlayerController : MonoBehaviour {
             Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
             this.playerPivot.transform.Rotate(movementX);
         }
+        //Manage ladder movement
         if(currentLadder != null && currentLadder.isUsable == true) {
             Vector3 movementY = new Vector3(0, ladderSpeed*v, 0);
             rg.velocity =  movementY;
@@ -65,6 +68,13 @@ public class PlayerController : MonoBehaviour {
     private void jump() {
         if(!isGrounded) { return; }
         this.rg.AddForce(new Vector3(0, jumpSpeed, 0));
+    }
+
+    private void flip() {
+        isFacingRight = !isFacingRight;
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
     }
 
 
