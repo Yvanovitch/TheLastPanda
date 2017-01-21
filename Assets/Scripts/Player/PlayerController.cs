@@ -17,11 +17,10 @@ public class PlayerController : MonoBehaviour {
     public Transform[]      rightCollider;
     
     private bool            isGrounded;
-    private Rigidbody       rg;
     private bool            canXmove;
-    private bool            canYmove;
+    private Rigidbody       rg;
     private LayerMask       groundLayer;
-    private int             isOnLadder; //Int cuz can be on 2 ladders at same time
+    private Ladder          currentLadder; //Ladder where player is
 
 
     // -------------------------------------------------------------------------
@@ -32,7 +31,7 @@ public class PlayerController : MonoBehaviour {
         this.groundLayer    = LayerMask.GetMask("Ground");
         this.rg             = GetComponent<Rigidbody>();
         this.canXmove       = true;
-        canYmove            = false;
+        this.currentLadder  = null;
     }
 
     public void Update() {
@@ -47,24 +46,7 @@ public class PlayerController : MonoBehaviour {
         if(Input.GetKeyDown("space") && isGrounded) {
             this.jump();
         }
-    }
-
-    private void OnTriggerEnter(Collider other) {
-        if(other.tag == "Ladder") {
-            ++isOnLadder;
-            canYmove = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other) {
-        if(other.tag == "Ladder") {
-            --isOnLadder;
-            if(isOnLadder >= 0) {
-                isOnLadder = 0; //Just in case of
-                canYmove = false;
-            }
-        }
-    }
+    }   
 
 
     // -------------------------------------------------------------------------
@@ -79,13 +61,9 @@ public class PlayerController : MonoBehaviour {
                 this.playerPivot.transform.Rotate(movementX);
             }
         }
-        if(canYmove) {
+        if(currentLadder != null) {
             Vector3 movementY = new Vector3(0, ladderSpeed*v, 0);
             rg.velocity =  movementY;
-
-        }
-        if(isOnLadder>0) {
-           // Vector3 counterGravity
         }
     }
 
@@ -113,7 +91,6 @@ public class PlayerController : MonoBehaviour {
         bool collide = false;
         foreach(Transform point in leftColliders) {
             collide = Physics.Raycast(point.position, v, collisionDistance);
-            Debug.DrawRay(point.position, v);
             if(collide) { return true; }
         }
         return collide;
@@ -127,5 +104,16 @@ public class PlayerController : MonoBehaviour {
             if(collide) { return true; }
         }
         return collide;
+    }
+
+
+    // -------------------------------------------------------------------------
+    // Getters - Setters
+    // -------------------------------------------------------------------------
+    public void setCurrentLadder(Ladder ladder) {
+        this.currentLadder = ladder;
+    }
+    public Ladder getCurrentLadder() {
+        return this.currentLadder;
     }
 }
