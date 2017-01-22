@@ -15,9 +15,9 @@ public class WaveMovement : MonoBehaviour {
     public float        minLifeTime;
     public float        maxLifeTime;
     public GameObject   wavePivot;
-    public GameObject   playerObject;
-    public GameObject   waveManager;
     public AudioSource  wavePopAudio;
+    private WaveManager wavesManager;
+    private GameObject  playerObject;
     private float       speed;
     private float       scaleMaxRatio;
     private Vector3     scaleMax;
@@ -31,6 +31,8 @@ public class WaveMovement : MonoBehaviour {
     // Unity functions - Override
     // -------------------------------------------------------------------------
     void Start() {
+        playerObject = GameObject.FindGameObjectWithTag("Player");
+        wavesManager = GameObject.Find("WavesManager").GetComponent<WaveManager>();
         this.wavePop();
     }
 
@@ -83,12 +85,21 @@ public class WaveMovement : MonoBehaviour {
         isGrowing       = true;
         isDying         = false;
         timeBeforeDIE   = lifetime;
-        wavePopAudio.Play();
+
+        //In case of left movement, need to flip the image
+        if(speed==0) { speed++; } //This is just in the case speed randomly choose 0 (This is ugly I know :p)
+        if(speed<0) {
+            Vector3 toto = scaleMax;
+            scaleMax.z *= -1;
+        }
+        wavePopAudio.Play(); //TODO To add for audio
     }
 
     private void waveDie() {
         isGrowing = false;
         isDying = true;
-        Destroy(gameObject, dyingSpeed); //Destroy in x seconds
+        wavesManager.destroyOneWave();
+        Destroy(wavePivot, dyingSpeed); //Destroy in x seconds
+
     }
 }
