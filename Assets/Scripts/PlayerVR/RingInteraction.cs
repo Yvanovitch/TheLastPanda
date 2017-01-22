@@ -30,7 +30,7 @@ public class RingInteraction : MonoBehaviour {
 			endTransition = true;
 		}
 
-		Debug.Log ("Test "+targetAlpha + " a " + color.a);
+		//Debug.Log ("Test "+targetAlpha + " a " + color.a);
 	}
 
 	public void SetTargetAlpha(float value) {

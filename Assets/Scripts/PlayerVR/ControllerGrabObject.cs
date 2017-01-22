@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ControllerGrabObject : MonoBehaviour {
 
-    public float collidingAlpha = 0.1f;
+    public float collidingAlpha = 0.08f;
     public float inHandAlpha = 0.15f;
 
     private SteamVR_TrackedObject trackedObj;
@@ -35,7 +35,7 @@ public class ControllerGrabObject : MonoBehaviour {
         }
         collidingObject = col.gameObject;
 
-        if(collidingObject.tag == "Ring")
+        if(collidingObject.tag == "Ring" && collidingObject != objectInHand)
         {
 			collidingObject.GetComponent<RingInteraction> ().SetTargetAlpha (collidingAlpha);
         }
