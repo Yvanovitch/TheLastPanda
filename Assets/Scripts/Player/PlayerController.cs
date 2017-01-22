@@ -23,10 +23,10 @@ public class PlayerController : MonoBehaviour {
     public Transform[]      rightColliders;
     
     private AudioSource     audioSource;
-    private bool            isGrounded;
     private Rigidbody       rg;
     private LayerMask       groundLayer;
     private Ladder          currentLadder; //Ladder where player is
+    private bool            isGrounded;
     private bool            isFacingRight;
     private bool            canPlayerMove;
 
