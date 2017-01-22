@@ -37,10 +37,7 @@ public class ControllerGrabObject : MonoBehaviour {
 
         if(collidingObject.tag == "Ring")
         {
-            Material material = collidingObject.GetComponent<Renderer>().material;
-            Color color = material.color;
-            color.a = collidingAlpha;
-            material.color = color;
+			collidingObject.GetComponent<RingInteraction> ().SetTargetAlpha (collidingAlpha);
         }
     }
 
@@ -63,10 +60,7 @@ public class ControllerGrabObject : MonoBehaviour {
 
         if (collidingObject.tag == "Ring" && collidingObject != objectInHand)
         {
-            Material material = collidingObject.GetComponent<Renderer>().material;
-            Color color = material.color;
-            color.a = 0f;
-            material.color = color;
+			collidingObject.GetComponent<RingInteraction> ().SetTargetAlpha (0f);
         }
 
         collidingObject = null;
@@ -92,10 +86,7 @@ public class ControllerGrabObject : MonoBehaviour {
             Quaternion initialLookAtRotation = Quaternion.Euler(initialLookAtRotationTemp);
             initialRingRotation = Quaternion.Inverse(initialLookAtRotation) * initialRingRotation;
 
-            Material material = objectInHand.GetComponent<Renderer>().material;
-            Color color = material.color;
-            color.a = inHandAlpha;
-            material.color = color;
+			objectInHand.GetComponent<RingInteraction> ().SetTargetAlpha (inHandAlpha);
         }
             /*Renderer rend = objectInHand.GetComponent<Renderer>();
             if (rend != null)
@@ -127,13 +118,10 @@ public class ControllerGrabObject : MonoBehaviour {
 
         if (objectInHand.tag == "Ring")
         {
-            Material material = objectInHand.GetComponent<Renderer>().material;
-            Color color = material.color;
             if(objectInHand == collidingObject)
-                color.a = collidingAlpha;
+				objectInHand.GetComponent<RingInteraction> ().SetTargetAlpha (collidingAlpha);
             else
-                color.a = 0;
-            material.color = color;
+				objectInHand.GetComponent<RingInteraction> ().SetTargetAlpha (0f);
         }
 
          objectInHand = null;
