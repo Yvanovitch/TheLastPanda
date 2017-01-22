@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour {
     public void Update() {
         this.isGrounded = checkIsGrounded();
         anim.SetBool("IsWalking", isWalking);
-        anim.SetBool("IsJumping", isWalking);
+        anim.SetBool("IsJumping", isJumping);
         anim.SetBool("IsClimbing", isClimbing);
     }
 
@@ -88,8 +88,8 @@ public class PlayerController : MonoBehaviour {
             rg.velocity =  movementY;
         }
         if(Input.GetKeyDown(KeyCode.Space) || v>0) {
-            jump();
             isJumping = true;
+            jump();
         }
         else if(!isGrounded) {
             isJumping = true;
