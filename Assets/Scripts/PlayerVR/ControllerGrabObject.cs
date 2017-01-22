@@ -185,10 +185,30 @@ public class ControllerGrabObject : MonoBehaviour {
 			audioSource.Play ();
 		}
 
-        if(objectInHand != null)
+		if (Controller.GetHairTriggerUp())
+		{
+			if (objectInHand)
+			{
+				ReleaseObject();
+				return;
+			}
+		}
+
+		if(objectInHand != null)
         {
             if (objectInHand.tag == "Ring")
             {
+				Vector3 playerPos = GameObject.FindWithTag("Player").transform.position;
+				GameObject ring = objectInHand;
+
+				if (playerPos.y >= sephigh.transform.position.y && ring.transform.position.y >= sephigh.transform.position.y)
+					return;
+				if ( (playerPos.y < sephigh.transform.position.y && ring.transform.position.y < sephigh.transform.position.y) &&
+					(playerPos.y >= seplow.transform.position.y && ring.transform.position.y >= seplow.transform.position.y) )
+					return;
+				if (playerPos.y <= seplow.transform.position.y && ring.transform.position.y <= seplow.transform.position.y)
+					return;
+				
                 GameObject parent = objectInHand.transform.parent.gameObject;
                 Vector3 newRotation = Quaternion.LookRotation(this.transform.position - parent.transform.position).eulerAngles;
                 newRotation.x = newRotation.z = 0;
@@ -200,12 +220,6 @@ public class ControllerGrabObject : MonoBehaviour {
         }
         
 
-        if (Controller.GetHairTriggerUp())
-        {
-            if (objectInHand)
-            {
-                ReleaseObject();
-            }
-        }
+        
     }
 }
