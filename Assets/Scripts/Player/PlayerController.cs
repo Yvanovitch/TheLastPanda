@@ -56,8 +56,7 @@ public class PlayerController : MonoBehaviour {
         //Right -> h>0
         //Left -> h<0
         //To move left or right, no GameObject must be on the way.
-        //if( (h<0 && !checkLeftColliders()) || (h>0 && !checkRightColliders())) {
-        if(h<0 || h>0) {
+        if( (h<0 && !checkLeftColliders()) || (h>0 && !checkRightColliders())) {
             Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
             this.playerPivot.transform.Rotate(movementX);
         }
@@ -95,20 +94,24 @@ public class PlayerController : MonoBehaviour {
     }
 
     private bool checkRightColliders() {
-        Vector3 v = new Vector3(-1, 0, 0);
+        Vector3 v = new Vector3(1, 0, 0);
+        v = transform.TransformDirection(v);
         bool collide = false;
         foreach(Transform point in rightColliders) {
             collide = Physics.Raycast(point.position, v, collisionDistance);
+            //Debug.DrawRay(point.position, v, Color.red, 1f); //DEBUG
             if(collide) { return true; }
         }
         return collide;
     }
 
     private bool checkLeftColliders() {
-        Vector3 v = new Vector3(1, 0, 0);
+        Vector3 v = new Vector3(-1, 0, 0);
+        v = transform.TransformDirection(v);
         bool collide = false;
         foreach(Transform point in leftColliders) {
             collide = Physics.Raycast(point.position, v, collisionDistance);
+            //Debug.DrawRay(point.position, v, Color.yellow, 1f); //DEBUG
             if(collide) { return true; }
         }
         return collide;
