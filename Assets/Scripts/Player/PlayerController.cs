@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
     public float            ladderSpeed = 1;
     public float            jumpSpeed = 0;
     public float            collisionDistance = 1f;
+    public float            collisionGroundDistance = 0.01f;
     public GameObject       playerPivot;
     public Transform[]      feetColliders;
     public Transform[]      leftColliders;
@@ -43,7 +44,7 @@ public class PlayerController : MonoBehaviour {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
         this.handlePlayerMovement(h, v);
-        if(Input.GetKeyDown("space") && isGrounded) {
+        if(Input.GetKeyDown(KeyCode.Space)) {
             this.jump();
         }
     }
@@ -53,8 +54,7 @@ public class PlayerController : MonoBehaviour {
     // GamePlay functions
     // -------------------------------------------------------------------------
     private void handlePlayerMovement(float h, float v) {
-        //Right -> h>0
-        //Left -> h<0
+        //Left:h<0 - Right: h>0
         //To move left or right, no GameObject must be on the way.
         if( (h<0 && !checkLeftColliders()) || (h>0 && !checkRightColliders())) {
             Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
@@ -70,6 +70,7 @@ public class PlayerController : MonoBehaviour {
     private void jump() {
         if(!isGrounded) { return; }
         this.rg.AddForce(new Vector3(0, jumpSpeed, 0));
+        this.isGrounded = false;
     }
 
     private void flip() {
@@ -87,10 +88,11 @@ public class PlayerController : MonoBehaviour {
         Vector3 v = new Vector3(0, -1, 0);
         bool grounded = false;
         foreach(Transform point in feetColliders) {
-            grounded = Physics.Raycast(point.position, v, 0.02f, groundLayer);
+            grounded = Physics.Raycast(point.position, v, collisionGroundDistance, groundLayer);
+            //Debug.DrawRay(point.position, v, Color.blue, 1f); //DEBUG
             if(grounded) { return true; } //We can stop as soon as one is grounded
         }
-        return grounded;
+        return false;
     }
 
     private bool checkRightColliders() {
@@ -102,7 +104,7 @@ public class PlayerController : MonoBehaviour {
             //Debug.DrawRay(point.position, v, Color.red, 1f); //DEBUG
             if(collide) { return true; }
         }
-        return collide;
+        return false;
     }
 
     private bool checkLeftColliders() {
@@ -114,7 +116,7 @@ public class PlayerController : MonoBehaviour {
             //Debug.DrawRay(point.position, v, Color.yellow, 1f); //DEBUG
             if(collide) { return true; }
         }
-        return collide;
+        return false;
     }
 
 
