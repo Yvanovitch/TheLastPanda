@@ -37,6 +37,13 @@ public class ControllerGrabObject : MonoBehaviour {
 
         if(collidingObject.tag == "Ring" && collidingObject != objectInHand)
         {
+			Vector3 playerPos = GameObject.FindWithTag ("Player").transform.position;
+			Bounds bounds = collidingObject.GetComponent<MeshFilter> ().mesh.bounds;
+			if (bounds.min.y > playerPos.y && bounds.max.y < playerPos.y) {
+				collidingObject = null;
+				return;
+			}
+				
 			collidingObject.GetComponent<RingInteraction> ().SetTargetAlpha (collidingAlpha);
         }
     }
@@ -86,6 +93,7 @@ public class ControllerGrabObject : MonoBehaviour {
             Quaternion initialLookAtRotation = Quaternion.Euler(initialLookAtRotationTemp);
             initialRingRotation = Quaternion.Inverse(initialLookAtRotation) * initialRingRotation;
 
+
 			objectInHand.GetComponent<RingInteraction> ().SetTargetAlpha (inHandAlpha);
         }
             /*Renderer rend = objectInHand.GetComponent<Renderer>();
@@ -122,6 +130,8 @@ public class ControllerGrabObject : MonoBehaviour {
 				objectInHand.GetComponent<RingInteraction> ().SetTargetAlpha (collidingAlpha);
             else
 				objectInHand.GetComponent<RingInteraction> ().SetTargetAlpha (0f);
+
+			//objectInHand.transform.parent.gameObject.GetComponent<RingInertia> ().SetInertia (previousAngle);
         }
 
          objectInHand = null;
