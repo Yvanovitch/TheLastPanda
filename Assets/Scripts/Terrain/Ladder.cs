@@ -50,7 +50,9 @@ public class Ladder : MonoBehaviour {
         }
         else {
             isUsable=true;
-            pc.getCurrentLadder().isUsable = true;
+            if(pc.getCurrentLadder()!=null) {
+                pc.getCurrentLadder().isUsable = true;
+            }
         }
     }
 
