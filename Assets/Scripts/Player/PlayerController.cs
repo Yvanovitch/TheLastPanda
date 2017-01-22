@@ -10,11 +10,11 @@ public class PlayerController : MonoBehaviour {
     public float            moveSpeed = 1;
     public float            ladderSpeed = 1;
     public float            jumpSpeed = 0;
-    public GameObject       playerPivot;
     public float            collisionDistance = 1f;
+    public GameObject       playerPivot;
     public Transform[]      feetColliders;
     public Transform[]      leftColliders;
-    public Transform[]      rightCollider;
+    public Transform[]      rightColliders;
     
     private bool            isGrounded;
     private Rigidbody       rg;
@@ -53,8 +53,11 @@ public class PlayerController : MonoBehaviour {
     // GamePlay functions
     // -------------------------------------------------------------------------
     private void handlePlayerMovement(float h, float v) {
+        //Right -> h>0
+        //Left -> h<0
         //To move left or right, no GameObject must be on the way.
-        if( (h>0 && !checkLeftColliders()) || (h<0 && !checkRightColliders())) {
+        //if( (h<0 && !checkLeftColliders()) || (h>0 && !checkRightColliders())) {
+        if(h<0 || h>0) {
             Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
             this.playerPivot.transform.Rotate(movementX);
         }
@@ -72,7 +75,7 @@ public class PlayerController : MonoBehaviour {
 
     private void flip() {
         isFacingRight = !isFacingRight;
-        Vector3 theScale = transform.localScale;
+        Vector3 theScale = transform.localScale; //TODO: apply on sprite object
         theScale.x *= -1;
         transform.localScale = theScale;
     }
@@ -94,7 +97,7 @@ public class PlayerController : MonoBehaviour {
     private bool checkRightColliders() {
         Vector3 v = new Vector3(-1, 0, 0);
         bool collide = false;
-        foreach(Transform point in leftColliders) {
+        foreach(Transform point in rightColliders) {
             collide = Physics.Raycast(point.position, v, collisionDistance);
             if(collide) { return true; }
         }
