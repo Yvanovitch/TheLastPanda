@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ControllerGrabObject : MonoBehaviour {
 
+    public float collidingAlpha = 0.1f;
+    public float inHandAlpha = 0.15f;
+
     private SteamVR_TrackedObject trackedObj;
 
     // Stores the GameObject that the trigger is currently colliding with
@@ -31,6 +34,14 @@ public class ControllerGrabObject : MonoBehaviour {
             return;
         }
         collidingObject = col.gameObject;
+
+        if(collidingObject.tag == "Ring")
+        {
+            Material material = collidingObject.GetComponent<Renderer>().material;
+            Color color = material.color;
+            color.a = collidingAlpha;
+            material.color = color;
+        }
     }
 
     public void OnTriggerEnter(Collider other)
@@ -48,6 +59,14 @@ public class ControllerGrabObject : MonoBehaviour {
         if (!collidingObject)
         {
             return;
+        }
+
+        if (collidingObject.tag == "Ring" && collidingObject != objectInHand)
+        {
+            Material material = collidingObject.GetComponent<Renderer>().material;
+            Color color = material.color;
+            color.a = 0f;
+            material.color = color;
         }
 
         collidingObject = null;
@@ -72,6 +91,11 @@ public class ControllerGrabObject : MonoBehaviour {
             initialLookAtRotationTemp.x = initialLookAtRotationTemp.z = 0;
             Quaternion initialLookAtRotation = Quaternion.Euler(initialLookAtRotationTemp);
             initialRingRotation = Quaternion.Inverse(initialLookAtRotation) * initialRingRotation;
+
+            Material material = objectInHand.GetComponent<Renderer>().material;
+            Color color = material.color;
+            color.a = inHandAlpha;
+            material.color = color;
         }
             /*Renderer rend = objectInHand.GetComponent<Renderer>();
             if (rend != null)
@@ -101,7 +125,18 @@ public class ControllerGrabObject : MonoBehaviour {
             objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
         }
 
-        objectInHand = null;
+        if (objectInHand.tag == "Ring")
+        {
+            Material material = objectInHand.GetComponent<Renderer>().material;
+            Color color = material.color;
+            if(objectInHand == collidingObject)
+                color.a = collidingAlpha;
+            else
+                color.a = 0;
+            material.color = color;
+        }
+
+         objectInHand = null;
     }
 
     // Update is called once per frame
