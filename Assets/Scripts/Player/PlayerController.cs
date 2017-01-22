@@ -14,11 +14,15 @@ public class PlayerController : MonoBehaviour {
     public float            collisionGroundDistance = 0.01f;
     public GameObject       playerPivot;
     public GameObject       playerSprite;
+    public Animator         anim;
+    public AudioClip        audioClimb;
+    public AudioClip        audioLand;
+    public AudioClip        audioJump;
     public Transform[]      feetColliders;
     public Transform[]      leftColliders;
     public Transform[]      rightColliders;
-    public Animator         anim;
     
+    private AudioSource     audioSource;
     private bool            isGrounded;
     private Rigidbody       rg;
     private LayerMask       groundLayer;
@@ -36,6 +40,7 @@ public class PlayerController : MonoBehaviour {
     // -------------------------------------------------------------------------
     // Use this for initialization
     void Start () {
+        this.audioSource    = GetComponent<AudioSource>();
         this.groundLayer    = LayerMask.GetMask("Ground");
         this.rg             = GetComponent<Rigidbody>();
         this.currentLadder  = null;
@@ -44,7 +49,13 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Update() {
+        //Update isGrounded + check if panda just landed
+        bool wasGrounded = isGrounded;
         this.isGrounded = checkIsGrounded();
+        if(wasGrounded != isGrounded && isGrounded == true) {
+            audioSource.clip = audioLand;
+            audioSource.Play();
+        }
         anim.SetBool("IsWalking", isWalking);
         anim.SetBool("IsJumping", isJumping);
         anim.SetBool("IsClimbing", isClimbing);
@@ -75,7 +86,7 @@ public class PlayerController : MonoBehaviour {
             this.playerPivot.transform.Rotate(movementX);
         }
         //Move Right: h>0 (No GameObject must be on the way)
-        if(h>0 && !checkRightColliders()) {
+        else if(h>0 && !checkRightColliders()) {
             isWalking = true;
             if(!isFacingRight) { flip(); }
             Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
@@ -84,11 +95,15 @@ public class PlayerController : MonoBehaviour {
         //Manage ladder movement
         if(currentLadder != null && currentLadder.isUsable == true) {
             isClimbing = true;
+            audioSource.clip = audioClimb;
+            audioSource.Play();
             Vector3 movementY = new Vector3(0, ladderSpeed*v, 0);
             rg.velocity =  movementY;
         }
-        if(Input.GetKeyDown(KeyCode.Space) || v>0) {
+        else if(Input.GetKeyDown(KeyCode.Space) || v>0) {
             isJumping = true;
+            audioSource.clip = audioJump;
+            audioSource.Play();
             jump();
         }
         else if(!isGrounded) {
