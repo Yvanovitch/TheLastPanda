@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour {
         Vector3 v = new Vector3(0, -1, 0);
         bool grounded = false;
         foreach(Transform point in feetColliders) {
-            grounded = Physics.Raycast(point.position, v, collisionGroundDistance, groundLayer);
+            grounded = Physics.Raycast(point.position, v, collisionGroundDistance);
             //Debug.DrawRay(point.position, v, Color.blue, 1f); //DEBUG
             if(grounded) { return true; } //We can stop as soon as one is grounded
         }
