@@ -27,6 +27,7 @@ public class WaveMovement : MonoBehaviour {
             scale,
             transform.localScale.z);
         wavePivot.transform.LookAt(wavePos);
+        //Shift init y position to be at the ring bottom
         transform.Translate(new Vector3(0, yStartPosition, 0)); //Shift Y pos to be at bottom
     }
 
