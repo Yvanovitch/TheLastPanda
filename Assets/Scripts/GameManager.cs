@@ -17,5 +17,10 @@ public class GameManager : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.F9))
 			SceneManager.LoadScene ("MainScene");
 
-	}
+        /*GameObject.Find("Camera (eye)").GetComponent<Camera>().targetDisplay = 1;
+        GameObject head = GameObject.Find("Camera (head)");
+            if (head != null) {
+            head.GetComponent<Camera>().targetDisplay = 1;
+        }*/
+    }
 }
