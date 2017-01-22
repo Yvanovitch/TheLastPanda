@@ -40,39 +40,21 @@ public class ControllerGrabObject : MonoBehaviour {
         {
             return;
         }
-        collidingObject = col.gameObject;
+        
 
-        if (collidingObject.tag == "Ring" && collidingObject != objectInHand)
+        if (col.gameObject.tag == "Ring" && col.gameObject != objectInHand)
         {
             Vector3 playerPos = GameObject.FindWithTag("Player").transform.position;
+            GameObject ring = col.gameObject;
 
-            topmovable = true;
-            midmovable = true;
-            botmovable = true;
-
-            if (playerPos.y >= sephigh.transform.position.y)
-                topmovable = false;
-            else if ((playerPos.y < sephigh.transform.position.y) && (playerPos.y < seplow.transform.position.y))
-                midmovable = false;
-            else if (playerPos.y <= seplow.transform.position.y)
-                botmovable = false;
-
-            if (col.transform.position.y >= sephigh.transform.position.y)
-                ringlvl = 2;
-            else if (col.transform.position.y >= sephigh.transform.position.y)
-                ringlvl = 1;
-            else if (col.transform.position.y >= sephigh.transform.position.y)
-                ringlvl = 0;
-
-            if (topmovable == false && ringlvl == 2)
+            if (playerPos.y >= sephigh.transform.position.y && ring.transform.position.y >= sephigh.transform.position.y)
                 return;
-            if (midmovable == false && ringlvl == 1)
+            if ( (playerPos.y < sephigh.transform.position.y && ring.transform.position.y < sephigh.transform.position.y) &&
+                (playerPos.y >= seplow.transform.position.y && ring.transform.position.y >= seplow.transform.position.y) )
                 return;
-            if (botmovable == false && ringlvl == 0)
+            if (playerPos.y <= seplow.transform.position.y && ring.transform.position.y <= seplow.transform.position.y)
                 return;
-
-
-
+            
 
 
             //		Bounds bounds = collidingObject.GetComponent<MeshFilter> ().mesh.bounds;
@@ -82,8 +64,10 @@ public class ControllerGrabObject : MonoBehaviour {
             //			return;
 
             //         Debug.Log("Outside" + playerPos.y + "min " + bounds.min.y);
-            collidingObject.GetComponent<RingInteraction>().SetTargetAlpha(collidingAlpha);
+            ring.GetComponent<RingInteraction>().SetTargetAlpha(collidingAlpha);
         }
+
+        collidingObject = col.gameObject;
     }
 
     public void OnTriggerEnter(Collider other)
