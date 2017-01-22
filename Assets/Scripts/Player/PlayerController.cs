@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour {
             Vector3 movementY = new Vector3(0, ladderSpeed*v, 0);
             rg.velocity =  movementY;
         }
-        if(Input.GetKeyDown(KeyCode.Space)) {
+        else if(Input.GetKeyDown(KeyCode.Space) || v>0) {
             this.jump();
         }
     }
