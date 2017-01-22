@@ -8,6 +8,7 @@ public class WaveManager : MonoBehaviour {
     public int          nbMaxWaves;
     public float        minDelayBetween2pop;
     public GameObject   wavePivot;
+    public AudioSource  audioWave;
 
     private int         currentNbWaves;
     private float       lastPopTimer;
@@ -37,6 +38,8 @@ public class WaveManager : MonoBehaviour {
         Instantiate(wavePivot, transform.position, transform.rotation);
         currentNbWaves++;
         lastPopTimer = 0;
+        audioWave.Stop();
+        audioWave.Play();
     }
     public void destroyOneWave() {
         currentNbWaves--;
