@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class WaveManager : MonoBehaviour {
+    // -------------------------------------------------------------------------
+    // Variables
+    // -------------------------------------------------------------------------
     public int          nbMaxWaves;
     public float        minDelayBetween2pop;
     public GameObject   wavePivot;
@@ -9,6 +12,10 @@ public class WaveManager : MonoBehaviour {
     private int         currentNbWaves;
     private float       lastPopTimer;
 
+
+    // -------------------------------------------------------------------------
+    // Unity functions - Override
+    // -------------------------------------------------------------------------
     // Use this for initialization
     void Start(){
         lastPopTimer = 0;
@@ -21,6 +28,10 @@ public class WaveManager : MonoBehaviour {
         pop1wave();
     }
 
+
+    // -------------------------------------------------------------------------
+    // GamePlay functions
+    // -------------------------------------------------------------------------
     public void pop1wave() {
         if(currentNbWaves>=nbMaxWaves || lastPopTimer<=minDelayBetween2pop) { return; }
         Instantiate(wavePivot, transform.position, transform.rotation);
