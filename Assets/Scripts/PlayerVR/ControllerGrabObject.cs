@@ -42,9 +42,9 @@ public class ControllerGrabObject : MonoBehaviour {
         }
         collidingObject = col.gameObject;
 
-        if(collidingObject.tag == "Ring" && collidingObject != objectInHand)
+        if (collidingObject.tag == "Ring" && collidingObject != objectInHand)
         {
-			Vector3 playerPos = GameObject.FindWithTag ("Player").transform.position;
+            Vector3 playerPos = GameObject.FindWithTag("Player").transform.position;
 
             topmovable = true;
             midmovable = true;
@@ -80,10 +80,11 @@ public class ControllerGrabObject : MonoBehaviour {
             //			collidingObject = null;
             //            Debug.Log("Inside" + playerPos.y + "min " + bounds.min.y);
             //			return;
+
+            //         Debug.Log("Outside" + playerPos.y + "min " + bounds.min.y);
+            collidingObject.GetComponent<RingInteraction>().SetTargetAlpha(collidingAlpha);
         }
-   //         Debug.Log("Outside" + playerPos.y + "min " + bounds.min.y);
-            collidingObject.GetComponent<RingInteraction> ().SetTargetAlpha (collidingAlpha);
-        }
+    }
 
     public void OnTriggerEnter(Collider other)
     {
