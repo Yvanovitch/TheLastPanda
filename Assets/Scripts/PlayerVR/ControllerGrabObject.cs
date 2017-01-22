@@ -7,6 +7,13 @@ public class ControllerGrabObject : MonoBehaviour {
     public float collidingAlpha = 0.08f;
     public float inHandAlpha = 0.15f;
 
+    public GameObject sephigh;
+    public GameObject seplow;
+    private bool topmovable;
+    private bool midmovable;
+    private bool botmovable;
+    private int ringlvl;
+
     private SteamVR_TrackedObject trackedObj;
 
     // Stores the GameObject that the trigger is currently colliding with
@@ -38,15 +45,45 @@ public class ControllerGrabObject : MonoBehaviour {
         if(collidingObject.tag == "Ring" && collidingObject != objectInHand)
         {
 			Vector3 playerPos = GameObject.FindWithTag ("Player").transform.position;
-			Bounds bounds = collidingObject.GetComponent<MeshFilter> ().mesh.bounds;
-			if (bounds.min.y > playerPos.y && bounds.max.y < playerPos.y) {
-				collidingObject = null;
-				return;
-			}
-				
-			collidingObject.GetComponent<RingInteraction> ().SetTargetAlpha (collidingAlpha);
+
+            topmovable = true;
+            midmovable = true;
+            botmovable = true;
+
+            if (playerPos.y >= sephigh.transform.position.y)
+                topmovable = false;
+            else if ((playerPos.y < sephigh.transform.position.y) && (playerPos.y < seplow.transform.position.y))
+                midmovable = false;
+            else if (playerPos.y <= seplow.transform.position.y)
+                botmovable = false;
+
+            if (col.transform.position.y >= sephigh.transform.position.y)
+                ringlvl = 2;
+            else if (col.transform.position.y >= sephigh.transform.position.y)
+                ringlvl = 1;
+            else if (col.transform.position.y >= sephigh.transform.position.y)
+                ringlvl = 0;
+
+            if (topmovable == false && ringlvl == 2)
+                return;
+            if (midmovable == false && ringlvl == 1)
+                return;
+            if (botmovable == false && ringlvl == 0)
+                return;
+
+
+
+
+
+            //		Bounds bounds = collidingObject.GetComponent<MeshFilter> ().mesh.bounds;
+            //		if(bounds.Contains(playerPos)){//if (bounds.min.y > playerPos.y && bounds.max.y < playerPos.y) {
+            //			collidingObject = null;
+            //            Debug.Log("Inside" + playerPos.y + "min " + bounds.min.y);
+            //			return;
         }
-    }
+   //         Debug.Log("Outside" + playerPos.y + "min " + bounds.min.y);
+            collidingObject.GetComponent<RingInteraction> ().SetTargetAlpha (collidingAlpha);
+        }
 
     public void OnTriggerEnter(Collider other)
     {
