@@ -92,7 +92,7 @@ public class WaveMovement : MonoBehaviour {
             Vector3 toto = scaleMax;
             scaleMax.z *= -1;
         }
-        wavePopAudio.Play(); //TODO To add for audio
+        //wavePopAudio.Play(); //TODO To add for audio
     }
 
     private void waveDie() {
