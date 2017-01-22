@@ -75,8 +75,10 @@ public class WaveMovement : MonoBehaviour {
             scaleMaxRatio,
             transform.localScale.z);
         transform.localScale = scaleMax; //Will be reset to 0 but just used for bound size here
-        //Shift init y position to be at the ring bottom
-        float startPos = yStartPosition + GetComponent<Renderer>().bounds.size.y /2;
+                                         //Shift init y position to be at the ring bottom
+
+        //float startPos = yStartPosition + GetComponent<Renderer>().bounds.size.y /2; //Old version
+        float startPos = yStartPosition; //TODODEBUG Version
         transform.Translate(new Vector3(0, startPos, 0)); //Shift Y pos to be at bottom
 
         //Call start wave pop
