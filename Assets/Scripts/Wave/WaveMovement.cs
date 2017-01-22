@@ -15,7 +15,6 @@ public class WaveMovement : MonoBehaviour {
     public float        minLifeTime;
     public float        maxLifeTime;
     public GameObject   wavePivot;
-    public AudioSource  wavePopAudio;
     private WaveManager wavesManager;
     private GameObject  playerObject;
     private float       speed;
@@ -92,7 +91,6 @@ public class WaveMovement : MonoBehaviour {
             Vector3 toto = scaleMax;
             scaleMax.z *= -1;
         }
-        //wavePopAudio.Play(); //TODO To add for audio
     }
 
     private void waveDie() {
