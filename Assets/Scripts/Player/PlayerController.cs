@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
     public float            collisionDistance = 1f;
     public float            collisionGroundDistance = 0.01f;
     public GameObject       playerPivot;
+    public GameObject       playerSprite;
     public Transform[]      feetColliders;
     public Transform[]      leftColliders;
     public Transform[]      rightColliders;
@@ -54,9 +55,15 @@ public class PlayerController : MonoBehaviour {
     // GamePlay functions
     // -------------------------------------------------------------------------
     private void handlePlayerMovement(float h, float v) {
-        //Left:h<0 - Right: h>0
-        //To move left or right, no GameObject must be on the way.
-        if( (h<0 && !checkLeftColliders()) || (h>0 && !checkRightColliders())) {
+        //Move Left: h<0 (No GameObject must be on the way)
+        if((h<0 && !checkLeftColliders())) {
+            if(isFacingRight) { flip(); }
+            Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
+            this.playerPivot.transform.Rotate(movementX);
+        }
+        //Move Right: h>0 (No GameObject must be on the way)
+        if(h>0 && !checkRightColliders()) {
+            if(!isFacingRight) { flip(); }
             Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
             this.playerPivot.transform.Rotate(movementX);
         }
@@ -74,10 +81,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void flip() {
+        //Flip the PlayerSprite
         isFacingRight = !isFacingRight;
-        Vector3 theScale = transform.localScale; //TODO: apply on sprite object
+        Vector3 theScale = playerSprite.transform.localScale;
         theScale.x *= -1;
-        transform.localScale = theScale;
+        playerSprite.transform.localScale = theScale;
     }
 
 
