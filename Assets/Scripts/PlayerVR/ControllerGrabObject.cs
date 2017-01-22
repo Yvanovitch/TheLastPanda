@@ -14,6 +14,9 @@ public class ControllerGrabObject : MonoBehaviour {
     private bool botmovable;
     private int ringlvl;
 
+	public AudioClip        audioGrab;
+	private AudioSource     audioSource;
+
     private SteamVR_TrackedObject trackedObj;
 
     // Stores the GameObject that the trigger is currently colliding with
@@ -27,6 +30,11 @@ public class ControllerGrabObject : MonoBehaviour {
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
     }
+
+	void Start()
+	{
+		this.audioSource    = GetComponent<AudioSource>();
+	}
 
     void Awake()
     {
@@ -117,6 +125,9 @@ public class ControllerGrabObject : MonoBehaviour {
 
 
 			objectInHand.GetComponent<RingInteraction> ().SetTargetAlpha (inHandAlpha);
+
+			audioSource.clip = audioGrab;
+			audioSource.Play();
         }
             /*Renderer rend = objectInHand.GetComponent<Renderer>();
             if (rend != null)
@@ -168,6 +179,11 @@ public class ControllerGrabObject : MonoBehaviour {
                 GrabObject();
             }
         }
+
+		if (Input.GetKeyDown (KeyCode.A)) {
+			audioSource.clip = audioGrab;
+			audioSource.Play ();
+		}
 
         if(objectInHand != null)
         {
