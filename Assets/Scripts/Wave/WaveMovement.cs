@@ -6,8 +6,9 @@ public class WaveMovement : MonoBehaviour {
     public float        maxSpeed;
     public float        minScale;
     public float        maxScale;
-    public GameObject   waveObject;
-    public GameObject   platformingPlayer;
+    public float        yStartPosition;
+    public GameObject   wavePivot;
+    public GameObject   playerObject;
     private float       speed;
     private float       scale;
 
@@ -17,14 +18,20 @@ public class WaveMovement : MonoBehaviour {
         speed = Random.Range(minSpeed, maxSpeed);
         scale = Random.Range(minScale, maxScale);
         //Set wave
-        waveObject.transform.localScale = new Vector3(
-            waveObject.transform.localScale.x, 
+        Vector3 playerPos = new Vector3(playerObject.transform.position.x, 0, playerObject.transform.position.z);
+        Vector3 wavePos = -playerPos;
+        Debug.DrawRay(wavePivot.transform.position, playerPos, Color.red, 5f);
+        Debug.DrawRay(wavePivot.transform.position, wavePos, Color.blue, 5f);
+        transform.localScale = new Vector3(
+            transform.localScale.x,
             scale,
-            waveObject.transform.localScale.z);
+            transform.localScale.z);
+        wavePivot.transform.LookAt(wavePos);
+        transform.Translate(new Vector3(0, yStartPosition, 0)); //Shift Y pos to be at bottom
     }
 
     void Update() {
-        transform.Rotate(new Vector3(0, speed, 0));
+        wavePivot.transform.Rotate(new Vector3(0, speed, 0));
     }
 
     private void OnTriggerEnter(Collider other) {
