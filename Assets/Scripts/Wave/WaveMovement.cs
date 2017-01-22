@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class WaveMovement : MonoBehaviour {
+    // -------------------------------------------------------------------------
+    // Variables
+    // -------------------------------------------------------------------------
     public float        minSpeed;
     public float        maxSpeed;
     public float        minScale;
@@ -12,7 +15,10 @@ public class WaveMovement : MonoBehaviour {
     private float       speed;
     private float       scale;
 
-    // Use this for initialization
+
+    // -------------------------------------------------------------------------
+    // Unity functions - Override
+    // -------------------------------------------------------------------------
     void Start() {
         //Get random values
         speed = Random.Range(minSpeed, maxSpeed);
@@ -20,15 +26,16 @@ public class WaveMovement : MonoBehaviour {
         //Set wave
         Vector3 playerPos = new Vector3(playerObject.transform.position.x, 0, playerObject.transform.position.z);
         Vector3 wavePos = -playerPos;
-        Debug.DrawRay(wavePivot.transform.position, playerPos, Color.red, 5f);
-        Debug.DrawRay(wavePivot.transform.position, wavePos, Color.blue, 5f);
+        //Debug.DrawRay(wavePivot.transform.position, playerPos, Color.red, 5f);
+        //Debug.DrawRay(wavePivot.transform.position, wavePos, Color.blue, 5f);
         transform.localScale = new Vector3(
             transform.localScale.x,
             scale,
             transform.localScale.z);
         wavePivot.transform.LookAt(wavePos);
         //Shift init y position to be at the ring bottom
-        transform.Translate(new Vector3(0, yStartPosition, 0)); //Shift Y pos to be at bottom
+        float startPos = yStartPosition + GetComponent<Renderer>().bounds.size.y /2 ;
+        transform.Translate(new Vector3(0, startPos, 0)); //Shift Y pos to be at bottom
     }
 
     void Update() {
@@ -40,4 +47,9 @@ public class WaveMovement : MonoBehaviour {
             //TODO: Kill the ugly player and display gameover panel
         }
     }
+
+
+    // -------------------------------------------------------------------------
+    // GamePlay functions
+    // -------------------------------------------------------------------------
 }
