@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour {
     public Transform[]      feetColliders;
     public Transform[]      leftColliders;
     public Transform[]      rightColliders;
+    public Animator         anim;
     
     private bool            isGrounded;
     private Rigidbody       rg;
@@ -24,6 +25,10 @@ public class PlayerController : MonoBehaviour {
     private Ladder          currentLadder; //Ladder where player is
     private bool            isFacingRight;
     private bool            canPlayerMove;
+
+    private bool            isJumping;
+    private bool            isWalking;
+    private bool            isClimbing;
 
 
     // -------------------------------------------------------------------------
@@ -40,6 +45,9 @@ public class PlayerController : MonoBehaviour {
 
     public void Update() {
         this.isGrounded = checkIsGrounded();
+        anim.SetBool("IsWalking", isWalking);
+        anim.SetBool("IsJumping", isJumping);
+        anim.SetBool("IsClimbing", isClimbing);
     }
 
     //Called at fixed time
@@ -54,26 +62,37 @@ public class PlayerController : MonoBehaviour {
     // GamePlay functions
     // -------------------------------------------------------------------------
     private void handlePlayerMovement(float h, float v) {
+        //Reinit all bool used for animation
+        isWalking   = false;
+        isJumping   = false;
+        isClimbing  = false;
         if(!canPlayerMove) { return; }
         //Move Left: h<0 (No GameObject must be on the way)
         if((h<0 && !checkLeftColliders())) {
+            isWalking = true;
             if(isFacingRight) { flip(); }
             Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
             this.playerPivot.transform.Rotate(movementX);
         }
         //Move Right: h>0 (No GameObject must be on the way)
         if(h>0 && !checkRightColliders()) {
+            isWalking = true;
             if(!isFacingRight) { flip(); }
             Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
             this.playerPivot.transform.Rotate(movementX);
         }
         //Manage ladder movement
         if(currentLadder != null && currentLadder.isUsable == true) {
+            isClimbing = true;
             Vector3 movementY = new Vector3(0, ladderSpeed*v, 0);
             rg.velocity =  movementY;
         }
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            this.jump();
+        if(Input.GetKeyDown(KeyCode.Space) || v>0) {
+            isJumping = true;
+            jump();
+        }
+        else if(!isGrounded) {
+            isJumping = true;
         }
     }
 
