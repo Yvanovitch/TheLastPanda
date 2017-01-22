@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour {
     private LayerMask       groundLayer;
     private Ladder          currentLadder; //Ladder where player is
     private bool            isFacingRight;
+    private bool            canPlayerMove;
 
 
     // -------------------------------------------------------------------------
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour {
         this.rg             = GetComponent<Rigidbody>();
         this.currentLadder  = null;
         this.isFacingRight  = true;
+        this.canPlayerMove  = true;
     }
 
     public void Update() {
@@ -45,9 +47,6 @@ public class PlayerController : MonoBehaviour {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
         this.handlePlayerMovement(h, v);
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            this.jump();
-        }
     }
 
 
@@ -55,6 +54,7 @@ public class PlayerController : MonoBehaviour {
     // GamePlay functions
     // -------------------------------------------------------------------------
     private void handlePlayerMovement(float h, float v) {
+        if(!canPlayerMove) { return; }
         //Move Left: h<0 (No GameObject must be on the way)
         if((h<0 && !checkLeftColliders())) {
             if(isFacingRight) { flip(); }
@@ -71,6 +71,9 @@ public class PlayerController : MonoBehaviour {
         if(currentLadder != null && currentLadder.isUsable == true) {
             Vector3 movementY = new Vector3(0, ladderSpeed*v, 0);
             rg.velocity =  movementY;
+        }
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            this.jump();
         }
     }
 
@@ -136,5 +139,8 @@ public class PlayerController : MonoBehaviour {
     }
     public Ladder getCurrentLadder() {
         return this.currentLadder;
+    }
+    public void canMove(bool value) {
+        canPlayerMove = value;
     }
 }
