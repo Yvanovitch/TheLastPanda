@@ -41,43 +41,44 @@ public class PlayerController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         this.audioSource    = GetComponent<AudioSource>();
-        this.groundLayer    = LayerMask.GetMask("Ground");
         this.rg             = GetComponent<Rigidbody>();
+        this.groundLayer    = LayerMask.GetMask("Ground");
         this.currentLadder  = null;
         this.isFacingRight  = true;
         this.canPlayerMove  = true;
-    }
-
-    public void Update() {
-        //Update isGrounded + check if panda just landed
-        bool wasGrounded = isGrounded;
-        this.isGrounded = checkIsGrounded();
-        if(wasGrounded != isGrounded && isGrounded == true) {
-            audioSource.clip = audioLand;
-            audioSource.Play();
-        }
-        anim.SetBool("IsWalking", isWalking);
-        anim.SetBool("IsJumping", isJumping);
-        anim.SetBool("IsClimbing", isClimbing);
     }
 
     //Called at fixed time
     private void FixedUpdate() {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
-        this.handlePlayerMovement(h, v);
+        float j = Input.GetAxis("Jump");
+        this.handlePlayerMovement(h, v, j);
+        anim.SetBool("IsWalking", isWalking);
+        anim.SetBool("IsJumping", isJumping);
+        anim.SetBool("IsClimbing", isClimbing);
     }
 
 
     // -------------------------------------------------------------------------
     // GamePlay functions
     // -------------------------------------------------------------------------
-    private void handlePlayerMovement(float h, float v) {
+    private void handlePlayerMovement(float h, float v, float j) {
         //Reinit all bool used for animation
         isWalking   = false;
-        isJumping   = false;
         isClimbing  = false;
+
+        //Update isGrounded + check if panda just landed
+        bool wasGrounded = isGrounded;
+        this.isGrounded = checkIsGrounded();
+        if(wasGrounded != isGrounded && isGrounded == true) {
+            isJumping = false;
+            audioSource.clip = audioLand;
+            audioSource.Play();
+        }
+
         if(!canPlayerMove) { return; }
+
         //Move Left: h<0 (No GameObject must be on the way)
         if((h<0 && !checkLeftColliders())) {
             isWalking = true;
@@ -93,28 +94,25 @@ public class PlayerController : MonoBehaviour {
             this.playerPivot.transform.Rotate(movementX);
         }
         //Manage ladder movement
-        if(currentLadder != null && currentLadder.isUsable == true) {
+        if(currentLadder != null && currentLadder.isUsable == true && !isGrounded) {
             isClimbing = true;
             audioSource.clip = audioClimb;
             audioSource.Play();
             Vector3 movementY = new Vector3(0, ladderSpeed*v, 0);
             rg.velocity =  movementY;
         }
-        else if(Input.GetKeyDown(KeyCode.Space) || v>0) {
+        else if(j>0 && isGrounded && !isJumping) {
             isJumping = true;
             audioSource.clip = audioJump;
             audioSource.Play();
             jump();
         }
-        else if(!isGrounded) {
-            isJumping = true;
-        }
     }
 
     private void jump() {
-        if(!isGrounded) { return; }
+        //if(!isGrounded) { return; }
         this.rg.AddForce(new Vector3(0, jumpSpeed, 0));
-        this.isGrounded = false;
+        //this.isGrounded = false;
     }
 
     private void flip() {
@@ -130,11 +128,11 @@ public class PlayerController : MonoBehaviour {
     // Tool functions - Check functions
     // -------------------------------------------------------------------------
     private bool checkIsGrounded() {
-        Vector3 v = new Vector3(0, -1, 0);
+        if(rg.velocity.y!=0) { return false; }
         bool grounded = false;
         foreach(Transform point in feetColliders) {
-            grounded = Physics.Raycast(point.position, v, collisionGroundDistance);
-            //Debug.DrawRay(point.position, v, Color.blue, 1f); //DEBUG
+            grounded = Physics.Raycast(point.position, Vector3.down, collisionGroundDistance);
+            //Debug.DrawRay(point.position, Vector3.down, Color.green, 1f); //DEBUG
             if(grounded) { return true; } //We can stop as soon as one is grounded
         }
         return false;
