@@ -29,8 +29,7 @@ public class PlayerController : MonoBehaviour {
     private bool            isGrounded;
     private bool            isFacingRight;
     private bool            canPlayerMove;
-
-    private bool            isJumping;
+    
     private bool            isWalking;
     private bool            isClimbing;
 
@@ -55,7 +54,6 @@ public class PlayerController : MonoBehaviour {
         float j = Input.GetAxis("Jump");
         this.handlePlayerMovement(h, v, j);
         anim.SetBool("IsWalking", isWalking);
-        anim.SetBool("IsJumping", isJumping);
         anim.SetBool("IsClimbing", isClimbing);
     }
 
@@ -72,23 +70,22 @@ public class PlayerController : MonoBehaviour {
         bool wasGrounded = isGrounded;
         this.isGrounded = checkIsGrounded();
         if(wasGrounded != isGrounded && isGrounded == true) {
-            isJumping = false;
+            this.anim.ResetTrigger("TakeOff");
             audioSource.clip = audioLand;
             audioSource.Play();
         }
 
         if(!canPlayerMove) { return; }
-
         //Move Left: h<0 (No GameObject must be on the way)
         if((h<0 && !checkLeftColliders())) {
-            isWalking = true;
+            isWalking = isGrounded ? true : false;
             if(isFacingRight) { flip(); }
             Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
             this.playerPivot.transform.Rotate(movementX);
         }
         //Move Right: h>0 (No GameObject must be on the way)
         else if(h>0 && !checkRightColliders()) {
-            isWalking = true;
+            isWalking = isGrounded ? true : false;
             if(!isFacingRight) { flip(); }
             Vector3 movementX = new Vector3(0, moveSpeed*h, 0);
             this.playerPivot.transform.Rotate(movementX);
@@ -101,18 +98,22 @@ public class PlayerController : MonoBehaviour {
             Vector3 movementY = new Vector3(0, ladderSpeed*v, 0);
             rg.velocity =  movementY;
         }
-        else if(j>0 && isGrounded && !isJumping) {
-            isJumping = true;
+        else if(j>0 && isGrounded) {
             audioSource.clip = audioJump;
             audioSource.Play();
             jump();
         }
+        if(this.rg.velocity.y < 0) {
+            this.anim.SetBool("IsFalling", true);
+        }
+        else {
+            this.anim.SetBool("IsFalling", false);
+        }
     }
 
     private void jump() {
-        //if(!isGrounded) { return; }
+        this.anim.SetTrigger("TakeOff");
         this.rg.AddForce(new Vector3(0, jumpSpeed, 0));
-        //this.isGrounded = false;
     }
 
     private void flip() {
