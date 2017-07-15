@@ -1,6 +1,6 @@
 # The Last Panda
 
-![GIF - TheLastPanda Demo](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/gifs/panda-move.gif)
+![GIF - TheLastPanda Demo](./Doc/imgs/game.png)
 
 The Last Panda is a 2 players Coop Game created during the [Global Game Jam Montreal](http://globalgamejam.org/). 
 The challenge was to make a game in 48h.
@@ -36,16 +36,17 @@ It's VR player's goal to warn poor panda about this terrible events.
 
 # Animations
 
-![GIF - WavesAnim](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/gifs/wave-flee.gif)
+![Gif - TheLastPanda Demo](./Doc/gif/panda-move.gif)
+![Gif - WavesAnim](./Doc/gif/wave-flee.gif)
 
 
 # Graphics
 Hand made by Tom, using pastel colors only.
 
-![Image - Bamboo](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/tree.png)
-![Image - Rock](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/platform.png)
-![Image - Rock2](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/rock.png)
-![Image - Tree](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/bamboo.png))
+![Image - Bamboo](./Doc/imgs/tree.png)
+![Image - Rock](./Doc/imgs/platform.png)
+![Image - Rock2](./Doc/imgs/rock.png)
+![Image - Tree](./Doc/imgs/bamboo.png))
 
 
 
@@ -55,9 +56,9 @@ Hand made by Tom, using pastel colors only.
 A challenge we faced was to create a 2D space for a 3D Virtual Reality environment.
 We end up using this "ring" representation where VR player is actually in the middle whereas Panda player has a 'fake' 2D platformer view.
 
-![IMG - Inside Unity](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/unity2.png)
-![IMG - Inside Unity](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/unity1.png)
-![IMG - Inside Unity](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/unity3.png)
+![IMG - Inside Unity](./Doc/imgs/unity2.png)
+![IMG - Inside Unity](./Doc/imgs/unity1.png)
+![IMG - Inside Unity](./Doc/imgs/unity3.png)
 
 
 
