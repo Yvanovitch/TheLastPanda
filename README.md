@@ -1,6 +1,6 @@
 # The Last Panda
 
-![GIF - TheLastPanda Demo](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/gifs/general-demo.gif)
+![GIF - TheLastPanda Demo](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/gifs/panda-move.gif)
 
 The Last Panda is a 2 players Coop Game created during the [Global Game Jam Montreal](http://globalgamejam.org/). 
 The challenge was to make a game in 48h.
@@ -36,25 +36,28 @@ It's VR player's goal to warn poor panda about this terrible events.
 
 # Animations
 
-![GIF - PandaLadderAnim](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/gifs/panda-ladder-anim.gif)
 ![GIF - WavesAnim](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/gifs/wave-flee.gif)
 
 
 # Graphics
 Hand made by Tom, using pastel colors only.
 
-![Image - Tree](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/16176330_1320003768022093_1887891081_n.png))
-![Image - Rock](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/16215645_1320003751355428_167338337_n.png)
-![Image - Rock2](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/16215776_1320003764688760_755689741_n.png)
-![Image - Bamboo](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/16237269_1320003758022094_2121141190_n.png)
+![Image - Bamboo](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/tree.png)
+![Image - Rock](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/platform.png)
+![Image - Rock2](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/rock.png)
+![Image - Tree](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/bamboo.png))
 
 
 
 # Behind the Unity
+> Made with Unity 5.5
+
 A challenge we faced was to create a 2D space for a 3D Virtual Reality environment.
 We end up using this "ring" representation where VR player is actually in the middle whereas Panda player has a 'fake' 2D platformer view.
 
-![GIF - Inside Unity](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/gifs/unity-demo.gif)
+![IMG - Inside Unity](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/unity2.png)
+![IMG - Inside Unity](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/unity1.png)
+![IMG - Inside Unity](https://www.webdepot.umontreal.ca/Usagers/p1150644/MonDepotPublic/panda/imgs/unity3.png)
 
 
 
